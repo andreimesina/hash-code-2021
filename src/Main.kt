@@ -1,6 +1,6 @@
 
 fun main() {
-    val example = "a_example.txt".readInput()
+    val simulation = "a.txt".readInput()
 
-    print("${example.id} ${example.name}")
+    print("$simulation")
 }
