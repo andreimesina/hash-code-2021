@@ -1,7 +1,7 @@
 import java.io.FileWriter
 import kotlin.math.max
 
-val simulation = "a.txt".readInput()
+val simulation = "d.txt".readInput()
 
 fun main() {
 
@@ -53,14 +53,14 @@ fun main() {
     }
 
     val writer = FileWriter("output.txt")
-    writer.append("${simulation.intersectionsNumber}").append("\n")
-    println("${simulation.intersectionsNumber}")
 
-    incomingStreets.keys.forEach { intersectionId: Int ->
+    var excludedIntersectionsCount = 0
+    incomingStreets.keys.forEachIndexed { index, intersectionId: Int ->
         var streetsWithNoCars = 0
         var totalSum = 0
         var maxFromAllStreets = 0
         val streets = incomingStreets[intersectionId]
+
         streets?.forEach { street: Street ->
             totalSum += sumCarsAtSem.getOrDefault(street.id, 0)
             maxFromAllStreets = max(maxFromAllStreets, maxCarsAtSem.getOrDefault(street.id, 0))
@@ -76,20 +76,27 @@ fun main() {
             }
         }
 
-        writer.append(intersectionId.toString()).append("\n")
-        println(intersectionId)
+        if (streets?.size?.minus(streetsWithNoCars) ?: 0 > 0) {
+            writer.append(intersectionId.toString()).append("\n")
+            println(intersectionId)
 
-        writer.append("${streets?.size?.minus(streetsWithNoCars)}").append("\n")
-        println(streets?.size?.minus(streetsWithNoCars))
+            writer.append("${streets?.size?.minus(streetsWithNoCars)}").append("\n")
+            println(streets?.size?.minus(streetsWithNoCars))
 
-        streets?.forEach { street: Street ->
-            if (street.semaphoreDuration != 0) {
-                writer.append(street.name + " " + street.semaphoreDuration).append("\n")
-                println(street.name + " " + street.semaphoreDuration)
+            streets?.forEach { street: Street ->
+                if (street.semaphoreDuration != 0) {
+                    writer.append(street.name + " " + street.semaphoreDuration).append("\n")
+                    println(street.name + " " + street.semaphoreDuration)
+                }
             }
+        } else {
+            excludedIntersectionsCount++
+            writer.append("\n")
         }
-
     }
+
+    writer.append("${simulation.intersectionsNumber - excludedIntersectionsCount}").append("\n")
+    println("${simulation.intersectionsNumber - excludedIntersectionsCount}")
 
     writer.close();
 }
