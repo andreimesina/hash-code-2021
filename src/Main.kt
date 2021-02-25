@@ -18,17 +18,27 @@ fun main() {
 
     simulation.cars.forEach { car: Car ->
         var time = 0
+
         car.streetsNames.forEach { s: String ->
-            val street: Street = simulation.streets[simulation.streetNameToId[s]!!]
-            var mapForSem: MutableMap<Int, Int>? = null
-            if (carsWaitingAtSem.containsKey(street.id)) {
-                mapForSem = carsWaitingAtSem[street.id]
+            val street: Street = simulation.streets.first { it.name == s }
+
+            val mapForSem: MutableMap<Int, Int>? = if (carsWaitingAtSem.containsKey(street.id)) {
+                carsWaitingAtSem[street.id]
             } else {
-                mapForSem = mutableMapOf()
+                mutableMapOf()
             }
-            mapForSem.set(time, mapForSem?.getOrDefault(time, 0)?.plus(1))
-            carsWaitingAtSem[street.endIntersectionId] = mapForSem
+
+            mapForSem?.set(time, mapForSem.getOrDefault(time, 0).plus(1))
+            carsWaitingAtSem[street.id] = mapForSem ?: mutableMapOf()
+
             time += street.duration
+        }
+    }
+
+    carsWaitingAtSem.keys.forEach { semaphoreId ->
+
+        carsWaitingAtSem[semaphoreId]?.keys?.forEach { second ->
+            println("semaphoreId: $semaphoreId - second: $second - cars number: ${carsWaitingAtSem[semaphoreId]?.get(second)} ")
         }
     }
 
