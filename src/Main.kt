@@ -1,4 +1,5 @@
 import kotlin.math.max
+import kotlin.math.roundToInt
 
 fun main() {
     val simulation = "a.txt".readInput()
@@ -66,8 +67,9 @@ fun main() {
                 streetsWithNoCars++
                 street.semaphoreDuration = 0
             } else {
-                val streetWeight: Float = 1f * sumCarsAtSem[street.id]!! / totalSum
-                street.semaphoreDuration = (streetWeight * maxFromAllStreets).toInt()
+                val streetWeight: Float = 1f * sumCarsAtSem.getOrDefault(street.id, 0) / totalSum
+//                println(streetWeight.toString() + " *** " + maxFromAllStreets)
+                street.semaphoreDuration = (streetWeight * maxFromAllStreets).toInt() + 1
             }
         }
         println("intersectionId: " + intersectionId)
