@@ -1,16 +1,19 @@
-
 fun main() {
     val simulation = "a.txt".readInput()
 
-    var incomingStreetsForEachIntersection: MutableMap<Int, List<Int>> = mutableMapOf()
-    simulation.streets.forEach { street: Street ->
-        if (incomingStreetsForEachIntersection.containsKey(street.endIntersectionId)) {
-            val l: List<Int>? = incomingStreetsForEachIntersection[street.endIntersectionId]
-//            l.ad
+    val incomingStreets: MutableMap<Int, List<Street>> = mutableMapOf()
+
+    (0 until simulation.intersectionsNumber).forEach { intersectionId ->
+        val streets = simulation.streets.filter { street ->
+            street.endIntersectionId == intersectionId
         }
+
+        incomingStreets[intersectionId] = streets
+    }
+
+    incomingStreets.keys.forEach { intersectionId ->
+        println("$intersectionId : ${incomingStreets[intersectionId]}")
     }
 
     print("$simulation")
 }
-
-fun
