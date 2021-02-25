@@ -5,6 +5,7 @@ data class Simulation(
     val carsNumber: Int,
     val bonusPoints: Int,
     val streets: List<Street>,
+    val streetNameToId: MutableMap<String, Int>,
     val cars: List<Car>
 )
 
@@ -14,7 +15,9 @@ data class Street(
     val endIntersectionId: Int,
     val name: String,
     val duration: Int
-)
+) {
+    var semaphoreDuration: Int = 1
+}
 
 data class Car(
     val id: Int,

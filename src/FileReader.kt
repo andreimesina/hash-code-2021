@@ -17,6 +17,7 @@ fun String.readInput(): Simulation {
         val name = scanner.next()
         val streetDuration = scanner.nextInt()
 
+
         Street(it, startId, endId, name, streetDuration)
     }
 
@@ -30,6 +31,9 @@ fun String.readInput(): Simulation {
         Car(it, carStreetsNumber, streetsNames)
     }
 
+    val streetNameToId = mutableMapOf<String, Int>()
+    streets.forEach { street -> streetNameToId[street.name] = street.id }
+
     return Simulation(
         duration,
         intersectionsNumber,
@@ -37,6 +41,7 @@ fun String.readInput(): Simulation {
         carsNumber,
         bonusPoints,
         streets,
+        streetNameToId,
         cars
     )
 }
