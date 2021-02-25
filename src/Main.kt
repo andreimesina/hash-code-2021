@@ -1,8 +1,9 @@
+import java.io.FileWriter
 import kotlin.math.max
-import kotlin.math.roundToInt
+
+val simulation = "a.txt".readInput()
 
 fun main() {
-    val simulation = "a.txt".readInput()
 
     val incomingStreets: MutableMap<Int, List<Street>> = mutableMapOf()
     val carsWaitingAtSem: MutableMap<Int, MutableMap<Int, Int>> = mutableMapOf()
@@ -39,8 +40,6 @@ fun main() {
 
             mapForSem?.set(time, mapForSem.getOrDefault(time, 0).plus(1))
             carsWaitingAtSem[street.id] = mapForSem ?: mutableMapOf()
-
-            println("endInterId: ${street.endIntersectionId} - car: ${car.id} - second: $time")
         }
     }
 
@@ -52,6 +51,10 @@ fun main() {
         }
         avgCarsAtSem[street.id] = 1f * sumCarsAtSem.getOrDefault(street.id, 0) / simulation.duration
     }
+
+    val writer = FileWriter("output.txt")
+    writer.append("${simulation.intersectionsNumber}").append("\n")
+    println("${simulation.intersectionsNumber}")
 
     incomingStreets.keys.forEach { intersectionId: Int ->
         var streetsWithNoCars = 0
@@ -72,14 +75,21 @@ fun main() {
                 street.semaphoreDuration = (streetWeight * maxFromAllStreets).toInt() + 1
             }
         }
-        println("intersectionId: " + intersectionId)
-        println("cate stazi: " + streets?.size?.minus(streetsWithNoCars))
+
+        writer.append(intersectionId.toString()).append("\n")
+        println(intersectionId)
+
+        writer.append("${streets?.size?.minus(streetsWithNoCars)}").append("\n")
+        println(streets?.size?.minus(streetsWithNoCars))
+
         streets?.forEach { street: Street ->
             if (street.semaphoreDuration != 0) {
+                writer.append(street.name + " " + street.semaphoreDuration).append("\n")
                 println(street.name + " " + street.semaphoreDuration)
             }
         }
 
     }
 
+    writer.close();
 }
