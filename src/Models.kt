@@ -9,6 +9,7 @@ data class Simulation(
 )
 
 data class Street(
+    val id: Int,
     val startIntersectionId: Int,
     val endIntersectionId: Int,
     val name: String,
@@ -16,6 +17,7 @@ data class Street(
 )
 
 data class Car(
+    val id: Int,
     val streetsNumber: Int,
     val streetsNames: List<String>
 )

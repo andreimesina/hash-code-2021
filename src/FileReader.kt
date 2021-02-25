@@ -17,7 +17,7 @@ fun String.readInput(): Simulation {
         val name = scanner.next()
         val streetDuration = scanner.nextInt()
 
-        Street(startId, endId, name, streetDuration)
+        Street(it, startId, endId, name, streetDuration)
     }
 
     val cars = (0 until carsNumber).map {
@@ -27,7 +27,7 @@ fun String.readInput(): Simulation {
             scanner.next()
         }
 
-        Car(carStreetsNumber, streetsNames)
+        Car(it, carStreetsNumber, streetsNames)
     }
 
     return Simulation(
