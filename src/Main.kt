@@ -12,14 +12,14 @@ fun main() {
         incomingStreets[intersectionId] = streets
     }
 
-    incomingStreets.keys.forEach { intersectionId ->
-        println("$intersectionId : ${incomingStreets[intersectionId]}")
-    }
+//    incomingStreets.keys.forEach { intersectionId ->
+//        println("$intersectionId : ${incomingStreets[intersectionId]}")
+//    }
 
     simulation.cars.forEach { car: Car ->
         var time = 0
 
-        car.streetsNames.forEach { s: String ->
+        car.streetsNames.forEachIndexed { index, s: String ->
             val street: Street = simulation.streets.first { it.name == s }
 
             val mapForSem: MutableMap<Int, Int>? = if (carsWaitingAtSem.containsKey(street.id)) {
@@ -28,19 +28,14 @@ fun main() {
                 mutableMapOf()
             }
 
+            if (index > 0)
+                time += street.duration
+
             mapForSem?.set(time, mapForSem.getOrDefault(time, 0).plus(1))
             carsWaitingAtSem[street.id] = mapForSem ?: mutableMapOf()
 
-            time += street.duration
+            println("endInterId: ${street.endIntersectionId} - car: ${car.id} - second: $time")
         }
     }
 
-    carsWaitingAtSem.keys.forEach { semaphoreId ->
-
-        carsWaitingAtSem[semaphoreId]?.keys?.forEach { second ->
-            println("semaphoreId: $semaphoreId - second: $second - cars number: ${carsWaitingAtSem[semaphoreId]?.get(second)} ")
-        }
-    }
-
-    print("$simulation")
 }
